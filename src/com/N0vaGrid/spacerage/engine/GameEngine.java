@@ -1,53 +1,59 @@
 package com.N0vaGrid.spacerage.engine;
 
-import com.N0vaGrid.spacerage.controller.InputController;
-import com.N0vaGrid.spacerage.ecs.component.ComponentManager;
-import com.N0vaGrid.spacerage.ecs.component.PositionComponent;
-import com.N0vaGrid.spacerage.ecs.entity.Entity;
-import com.N0vaGrid.spacerage.ecs.system.DebugSystem;
-import com.N0vaGrid.spacerage.service.GameService;
-import com.N0vaGrid.spacerage.ui.GameWindow;
+import com.N0vaGrid.spacerage.ecs.component.*;
+import com.N0vaGrid.spacerage.ecs.entity.EntityFactory;
+import com.N0vaGrid.spacerage.ecs.entity.EntityManager;
+import com.N0vaGrid.spacerage.ecs.input.InputState;
+import com.N0vaGrid.spacerage.ecs.system.*;
 import com.N0vaGrid.spacerage.ui.GamePanel;
 
 public class GameEngine implements Runnable {
 
-    private GameService gameService;
-    private GamePanel gamePanel;
-    private InputController input;
+    private GamePanel panel;
+
     private ComponentManager componentManager;
-    private DebugSystem debugSystem;
+    private EntityManager entityManager;
+
+    private InputState input;
+
+    // 系统
+    private MovementSystem movementSystem;
+    private BulletCleanupSystem bulletCleanupSystem;
+    private AnimationSystem animationSystem;
+    private CollisionSystem collisionSystem;
+    private ExplosionCleanupSystem explosionCleanupSystem;
+    private InputSystem inputSystem;
+    private FireSystem fireSystem;
+    private CleanupSystem cleanupSystem;
+
+
 
     public GameEngine(){
 
-        gameService = new GameService();
-        input = new InputController();
-
-        gamePanel = new GamePanel(gameService);
-
-        gamePanel.setFocusable(true);
-        gamePanel.requestFocusInWindow();
-        gamePanel.addKeyListener(input);
-
         componentManager = new ComponentManager();
-        debugSystem = new DebugSystem();
+        entityManager = new EntityManager();
+        input = new InputState();
 
-        GameWindow window = new GameWindow(gamePanel);
+        inputSystem = new InputSystem(input);
+        movementSystem = new MovementSystem();
+        fireSystem = new FireSystem();
+        collisionSystem = new CollisionSystem();
+        animationSystem = new AnimationSystem();
+        cleanupSystem = new CleanupSystem();
 
-        Entity test = new Entity();
+        EntityFactory.createPlayer(componentManager, entityManager);
 
-        componentManager.addComponent(test, new PositionComponent(100, 100));
 
     }
 
     @Override
     public void run() {
 
+
+
         while(true){
 
-            gameService.update(input);
-            debugSystem.update(componentManager);
-
-            gamePanel.repaint();
+            update();
 
             try{
                 Thread.sleep(16);
@@ -57,6 +63,27 @@ public class GameEngine implements Runnable {
 
         }
 
+    }
+
+    public ComponentManager getCM(){ return componentManager; }
+    public InputState getInput(){ return input; }
+
+    public void update(){
+        inputSystem.update(componentManager);
+
+        movementSystem.update(componentManager);
+
+        fireSystem.update(componentManager, entityManager);
+
+        collisionSystem.update(componentManager, entityManager);
+
+        cleanupSystem.update(componentManager, entityManager);
+
+        //bulletCleanupSystem.update(componentManager, entityManager);
+
+        //explosionCleanupSystem.update(componentManager, entityManager);
+
+        entityManager.flushRemove(componentManager);
     }
 
 }

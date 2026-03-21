@@ -34,4 +34,11 @@ public class ComponentManager {
 
         return components.getOrDefault(type, new HashMap<>()).keySet();
     }
+
+    public void removeAllComponents(Entity e){
+
+        for(Map<Entity, Component> map : components.values()){
+            map.remove(e);
+        }
+    }
 }

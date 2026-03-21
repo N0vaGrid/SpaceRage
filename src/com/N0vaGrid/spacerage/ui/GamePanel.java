@@ -1,23 +1,68 @@
 package com.N0vaGrid.spacerage.ui;
 
 import com.N0vaGrid.spacerage.config.Config;
-import com.N0vaGrid.spacerage.model.PlayerPlane;
-import com.N0vaGrid.spacerage.service.GameService;
+import com.N0vaGrid.spacerage.ecs.component.ComponentManager;
+import com.N0vaGrid.spacerage.ecs.input.InputState;
+import com.N0vaGrid.spacerage.ecs.system.InputSystem;
+import com.N0vaGrid.spacerage.ecs.system.RenderSystem;
+import com.N0vaGrid.spacerage.engine.GameEngine;
 import com.N0vaGrid.spacerage.util.ResourceManager;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
 public class GamePanel extends JPanel  {
 
     private Thread gameThread;
 
-    private GameService gameService;
-    public GamePanel(GameService gameService) {
+    private RenderSystem renderSystem;
+    private InputState input;
 
-        this.gameService = gameService;
+    private GameEngine engine;
+
+    public GamePanel(GameEngine engine) {
+
+        this.engine = engine;
+        this.input = engine.getInput();
+
+        setFocusable(true);
+
+        addKeyListener(new KeyAdapter(){
+
+            @Override
+            public void keyPressed(KeyEvent e){
+
+                switch(e.getKeyCode()){
+
+                    case KeyEvent.VK_LEFT:  input.left = true; break;
+                    case KeyEvent.VK_RIGHT: input.right = true; break;
+                    case KeyEvent.VK_UP:    input.up = true; break;
+                    case KeyEvent.VK_DOWN:  input.down = true; break;
+                    case KeyEvent.VK_SPACE: input.fire = true; break;
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e){
+
+                switch(e.getKeyCode()){
+
+                    case KeyEvent.VK_LEFT:  input.left = false; break;
+                    case KeyEvent.VK_RIGHT: input.right = false; break;
+                    case KeyEvent.VK_UP:    input.up = false; break;
+                    case KeyEvent.VK_DOWN:  input.down = false; break;
+                    case KeyEvent.VK_SPACE: input.fire = false; break;
+                }
+            }
+            @Override
+            public void keyTyped(KeyEvent e){}
+        });
+
+        this.renderSystem = new RenderSystem();
     }
 
 
@@ -27,41 +72,28 @@ public class GamePanel extends JPanel  {
 
         super.paintComponent(g);
 
-        // 背景
-        gameService.getBackground().draw(g);
-        //绘制玩家
-        gameService.getPlayer().draw(g);
+       // System.out.println("paint"); // ⭐ 打印
 
-        // 渲染子弹
-        for(var bullet : gameService.getBullets()){
-            bullet.draw(g);
-        }
-        // 渲染敌人
-        for(var enemy : gameService.getEnemies()){
-            enemy.draw(g);
-        }
+        renderSystem.render(engine.getCM(), g);
 
-        // 渲染爆炸
-        for(var ex : gameService.getExplosions()){
-            ex.draw(g);
-        }
-        // 绘制分数
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", Font.BOLD, 24));
-        g.drawString("Score: " + gameService.getScore(), 10, 20);
+    }
 
-        //游戏结束画面
-        if(gameService.isGameOver()){
 
-            g.setColor(Color.RED);
-            g.setFont(new Font("Arial", Font.BOLD, 48));
+    public void setEngine(GameEngine engine) {
+        this.engine = engine;
+    }
 
-            // 获取文字宽度以便居中
-            int textWidth = g.getFontMetrics().stringWidth("GAME OVER");
-            g.drawString("GAME OVER", Config.WIDTH/2 - textWidth/2, Config.HEIGHT/2);
+    public void startGameLoop(){
 
-        }
+        Timer timer = new Timer(16, e -> {
 
+            engine.update();  // 逻辑
+
+            repaint();        // 渲染
+
+        });
+
+        timer.start();
     }
 
 }
