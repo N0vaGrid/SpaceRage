@@ -1,16 +1,93 @@
 package com.n0vaGrid.spacerage.ecs.system;
 
-
-
+import com.n0vaGrid.spacerage.config.Config;
 import com.n0vaGrid.spacerage.ecs.component.*;
 import com.n0vaGrid.spacerage.ecs.entity.Entity;
+import com.n0vaGrid.spacerage.ui.Star;
+import com.n0vaGrid.spacerage.util.ResourceManager;
 
-import java.awt.Graphics;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class RenderSystem {
 
+    private int backgroundY = 0;
+    // 滚动速度
+    private int scrollSpeed = 2;
+
+    private List<Star> stars = new ArrayList<>();
+    private Random random = new Random();
+
+    public RenderSystem(){
+        //绘制星星
+        for(int i = 0; i < 120; i++){
+
+            int x = random.nextInt(800);
+            int y = random.nextInt(600);
+
+            int layer = random.nextInt(3);
+
+            int speed;
+            int size;
+
+            if(layer == 0){
+                speed = 1;   // 远处
+                size = 1;
+            }
+            else if(layer == 1){
+                speed = 2;   // 中层
+                size = 2;
+            }
+            else{
+                speed = 2;   // 近处
+                size = 3;
+            }
+
+            stars.add(new Star(x, y, speed, size));
+        }
+    }
 
     public void render(ComponentManager cm, Graphics g){
+
+        //绘制背景
+
+        Image bg = ResourceManager.BG;
+
+        backgroundY += scrollSpeed;
+
+        if(backgroundY >= bg.getHeight(null)){
+            backgroundY = 0;
+        }
+
+        g.drawImage(bg, 0, backgroundY - bg.getHeight(null), null);
+        g.drawImage(bg, 0, backgroundY, null);
+
+        //绘制星星
+        g.setColor(Color.white);
+
+        for(Star s : stars){
+
+            if(s.size == 1)
+                g.setColor(new Color(150,150,150));
+            else if(s.size == 2)
+                g.setColor(new Color(200,200,200));
+            else
+                g.setColor(Color.WHITE);
+
+            s.y += s.speed;
+
+            if(s.y > Config.HEIGHT){
+                s.y = -10;
+                s.x = random.nextInt(Config.WIDTH);
+            }
+
+                g.fillRect(s.x, s.y, s.size, s.size);
+
+        }
+
+        //绘制游戏对象
 
         for(Entity e : cm.getEntities(SpriteComponent.class)){
 

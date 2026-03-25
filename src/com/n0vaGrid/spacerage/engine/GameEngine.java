@@ -92,7 +92,6 @@ public class GameEngine implements Runnable {
 
         entityManager.flushRemove(componentManager);
 
-        System.out.println("Entities: " + entityManager.getEntities().size());
     }
 
 }
