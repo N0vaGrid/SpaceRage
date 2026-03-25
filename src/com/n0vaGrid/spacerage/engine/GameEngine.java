@@ -16,6 +16,8 @@ public class GameEngine implements Runnable {
     private ComponentManager componentManager;
     private EntityManager entityManager;
 
+    private EntityFactory factory;
+
     private InputState input;
 
     // 系统
@@ -26,14 +28,18 @@ public class GameEngine implements Runnable {
     private ExplosionCleanupSystem explosionCleanupSystem;
     private InputSystem inputSystem;
     private FireSystem fireSystem;
+    private EnemySpawnerSystem enemySpawnerSystem;
     private CleanupSystem cleanupSystem;
 
 
 
     public GameEngine(){
-
         componentManager = new ComponentManager();
         entityManager = new EntityManager();
+
+        factory = new EntityFactory(entityManager, componentManager);
+        factory.createPlayer();
+
         input = new InputState();
 
         inputSystem = new InputSystem(input);
@@ -42,9 +48,7 @@ public class GameEngine implements Runnable {
         collisionSystem = new CollisionSystem();
         animationSystem = new AnimationSystem();
         cleanupSystem = new CleanupSystem();
-
-        EntityFactory.createPlayer(componentManager, entityManager);
-
+        enemySpawnerSystem = new EnemySpawnerSystem(factory);
 
     }
 
@@ -77,6 +81,8 @@ public class GameEngine implements Runnable {
         movementSystem.update(componentManager);
 
         fireSystem.update(componentManager, entityManager);
+
+        enemySpawnerSystem.update(componentManager, entityManager);
 
         collisionSystem.update(componentManager, entityManager);
 
