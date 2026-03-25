@@ -33,6 +33,8 @@ public class CollisionSystem {
 
                         // 生成爆炸
                         createExplosion(cm, em, ep.x, ep.y);
+
+                        break;
                     }
                 }
             }

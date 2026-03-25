@@ -4,8 +4,8 @@ import com.n0vaGrid.spacerage.engine.GameEngine;
 import com.n0vaGrid.spacerage.ui.GamePanel;
 import com.n0vaGrid.spacerage.ui.GameWindow;
 
-public class Main {
-    public static void Main(String[] args) {
+public class Application {
+    public static void main(String[] args) {
 
         GameEngine engine = new GameEngine();
 

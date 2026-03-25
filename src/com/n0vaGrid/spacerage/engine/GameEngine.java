@@ -11,6 +11,8 @@ public class GameEngine implements Runnable {
 
     private GamePanel panel;
 
+    private CommandQueue commandQueue = new CommandQueue();
+
     private ComponentManager componentManager;
     private EntityManager entityManager;
 
@@ -67,6 +69,7 @@ public class GameEngine implements Runnable {
 
     public ComponentManager getCM(){ return componentManager; }
     public InputState getInput(){ return input; }
+    public CommandQueue getCommandQueue(){return commandQueue;}
 
     public void update(){
         inputSystem.update(componentManager);
@@ -83,7 +86,8 @@ public class GameEngine implements Runnable {
 
         //explosionCleanupSystem.update(componentManager, entityManager);
 
-        entityManager.flushRemove(componentManager);
+        commandQueue.execute();
+
     }
 
 }
