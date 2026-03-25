@@ -22,10 +22,8 @@ public class GameEngine implements Runnable {
 
     // 系统
     private MovementSystem movementSystem;
-    private BulletCleanupSystem bulletCleanupSystem;
     private AnimationSystem animationSystem;
     private CollisionSystem collisionSystem;
-    private ExplosionCleanupSystem explosionCleanupSystem;
     private InputSystem inputSystem;
     private FireSystem fireSystem;
     private EnemySpawnerSystem enemySpawnerSystem;
@@ -44,7 +42,7 @@ public class GameEngine implements Runnable {
 
         inputSystem = new InputSystem(input);
         movementSystem = new MovementSystem();
-        fireSystem = new FireSystem();
+        fireSystem = new FireSystem(input , factory);
         collisionSystem = new CollisionSystem();
         animationSystem = new AnimationSystem();
         cleanupSystem = new CleanupSystem();
@@ -54,8 +52,6 @@ public class GameEngine implements Runnable {
 
     @Override
     public void run() {
-
-
 
         while(true){
 
@@ -88,12 +84,15 @@ public class GameEngine implements Runnable {
 
         cleanupSystem.update(componentManager, entityManager);
 
-        //bulletCleanupSystem.update(componentManager, entityManager);
+        animationSystem.update(componentManager);
 
         //explosionCleanupSystem.update(componentManager, entityManager);
 
         commandQueue.execute();
 
+        entityManager.flushRemove(componentManager);
+
+        System.out.println("Entities: " + entityManager.getEntities().size());
     }
 
 }

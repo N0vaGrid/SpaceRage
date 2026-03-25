@@ -25,6 +25,8 @@ public class CollisionSystem {
 
                     if(checkCollision(bp, bc, ep, ec)){
 
+                        System.out.println("collision!");
+
                         // 删除子弹
                         em.removeEntity(bullet);
 

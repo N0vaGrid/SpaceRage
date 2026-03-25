@@ -3,6 +3,8 @@ package com.n0vaGrid.spacerage.ecs.entity;
 import com.n0vaGrid.spacerage.ecs.component.*;
 import com.n0vaGrid.spacerage.util.ResourceManager;
 
+import javax.swing.text.Position;
+
 public class EntityFactory {
 
     private EntityManager em;
@@ -63,4 +65,25 @@ public class EntityFactory {
         return enemy;
     }
 
+/*    public Entity createExplosion(int x, int y){
+
+    }*/
+
+    public Entity createBullet(int x ,int y){
+
+        Entity bullet = new Entity();
+        em.addEntity(bullet);
+
+        cm.addComponent(bullet, new PositionComponent(x, y));
+        cm.addComponent(bullet, new VelocityComponent(0, -8));
+
+        cm.addComponent(bullet, new SpriteComponent(
+                ResourceManager.BULLET, 64, 64
+        ));
+
+        cm.addComponent(bullet, new ColliderComponent(64, 64));
+        cm.addComponent(bullet, new BulletComponent());
+
+        return bullet;
+    }
 }

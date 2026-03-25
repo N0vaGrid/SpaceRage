@@ -1,14 +1,23 @@
 package com.n0vaGrid.spacerage.ecs.system;
 
 import com.n0vaGrid.spacerage.ecs.component.*;
+import com.n0vaGrid.spacerage.ecs.entity.EntityFactory;
 import com.n0vaGrid.spacerage.ecs.entity.EntityManager;
 import com.n0vaGrid.spacerage.ecs.entity.Entity;
+import com.n0vaGrid.spacerage.ecs.input.InputState;
 import com.n0vaGrid.spacerage.util.ResourceManager;
 
 public class FireSystem {
 
     private long lastFireTime = 0;
     private int cooldown = 200;
+    private InputState input;
+    private EntityFactory factory;
+
+    public FireSystem(InputState input , EntityFactory factory){
+        this.input = input;
+        this.factory = factory;
+    }
 
     public void update(ComponentManager cm, EntityManager em){
 
@@ -16,22 +25,16 @@ public class FireSystem {
 
         for(Entity e : cm.getEntities(PlayerComponent.class)){
 
-            if(now - lastFireTime < cooldown) continue;
+            if(!input.fire) continue;
 
             PositionComponent p = cm.getComponent(e, PositionComponent.class);
 
-            Entity bullet = new Entity();
-            em.addEntity(bullet);
+            VelocityComponent v = new VelocityComponent(0, -8);
 
-            cm.addComponent(bullet, new PositionComponent(p.x , p.y));
-            cm.addComponent(bullet, new VelocityComponent(0, -8));
 
-            cm.addComponent(bullet, new SpriteComponent(
-                    ResourceManager.BULLET, 64, 64
-            ));
+            if(now - lastFireTime < cooldown) continue;
 
-            cm.addComponent(bullet, new ColliderComponent(10, 20));
-            cm.addComponent(bullet, new BulletComponent());
+            factory.createBullet(p.x ,p.y);
 
             lastFireTime = now;
         }
