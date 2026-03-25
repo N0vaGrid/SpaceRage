@@ -6,20 +6,20 @@ import com.N0vaGrid.spacerage.util.ResourceManager;
 public class EntityFactory {
     public static Entity createPlayer(ComponentManager cm, EntityManager em){
 
-        Entity e = new Entity();
-        em.addEntity(e);
+        Entity player = new Entity();
+        em.addEntity(player);
 
-        cm.addComponent(e, new PositionComponent(200, 600));
-        cm.addComponent(e, new VelocityComponent(0, 0));
+        cm.addComponent(player, new PositionComponent(200, 600));
+        cm.addComponent(player, new VelocityComponent(0, 0));
 
-        cm.addComponent(e, new SpriteComponent(
-                ResourceManager.PLAYER_IDLE, 50, 50
+        cm.addComponent(player, new SpriteComponent(
+                ResourceManager.PLAYER_IDLE, 64, 64
         ));
 
-        cm.addComponent(e, new ColliderComponent(50, 50));
-        cm.addComponent(e, new PlayerComponent());
+        cm.addComponent(player, new ColliderComponent(64, 64));
+        cm.addComponent(player, new PlayerComponent());
 
-        return e;
+        return player;
     }
 
 }

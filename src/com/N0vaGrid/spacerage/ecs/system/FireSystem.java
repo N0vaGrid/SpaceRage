@@ -23,7 +23,7 @@ public class FireSystem {
             Entity bullet = new Entity();
             em.addEntity(bullet);
 
-            cm.addComponent(bullet, new PositionComponent(p.x + 20, p.y));
+            cm.addComponent(bullet, new PositionComponent(p.x , p.y));
             cm.addComponent(bullet, new VelocityComponent(0, -8));
 
             cm.addComponent(bullet, new SpriteComponent(
