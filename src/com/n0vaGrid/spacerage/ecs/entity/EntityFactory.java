@@ -1,9 +1,11 @@
 package com.n0vaGrid.spacerage.ecs.entity;
 
 import com.n0vaGrid.spacerage.ecs.component.*;
+import com.n0vaGrid.spacerage.engine.Animation;
 import com.n0vaGrid.spacerage.util.ResourceManager;
 
 import javax.swing.text.Position;
+import java.awt.*;
 
 public class EntityFactory {
 
@@ -28,6 +30,29 @@ public class EntityFactory {
                 ResourceManager.PLAYER_IDLE, 64, 64
         ));
 
+        // 动画
+        Animation idle = new Animation(
+                new Image[]{ResourceManager.PLAYER_IDLE},
+                200,
+                true
+        );
+
+        Animation left = new Animation(
+                ResourceManager.PLAYER_LEFT,
+                120,
+                 false
+        );
+
+        Animation right = new Animation(
+                ResourceManager.PLAYER_RIGHT,
+                120,
+                false
+        );
+
+        AnimationComponent anim =
+                new AnimationComponent(idle, left, right);
+
+        cm.addComponent(player, anim);
         // 碰撞器
         cm.addComponent(player, new ColliderComponent(64, 64));
         cm.addComponent(player, new PlayerComponent());
