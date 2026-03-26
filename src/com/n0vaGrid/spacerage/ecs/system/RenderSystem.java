@@ -121,7 +121,9 @@ public class RenderSystem {
 
 
             // 绘制碰撞器
-            g.drawRect(p.x,p.y,collider.width,collider.height);
+            if(collider != null){
+                g.drawRect(p.x,p.y,collider.width,collider.height);
+            }
         }
     }
 }

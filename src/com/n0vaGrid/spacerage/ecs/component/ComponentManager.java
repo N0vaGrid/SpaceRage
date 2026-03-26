@@ -40,4 +40,13 @@ public class ComponentManager {
             map.remove(e);
         }
     }
+
+    public boolean hasComponent(Entity e, Class<? extends Component> type){
+
+        Map<Entity, Component> map = components.get(type);
+
+        if(map == null) return false;
+
+        return map.containsKey(e);
+    }
 }

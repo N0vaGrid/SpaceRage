@@ -1,4 +1,4 @@
-package com.n0vaGrid.spacerage.ecs.collison;
+package com.n0vaGrid.spacerage.ecs.collision;
 
 import com.n0vaGrid.spacerage.ecs.entity.Entity;
 
