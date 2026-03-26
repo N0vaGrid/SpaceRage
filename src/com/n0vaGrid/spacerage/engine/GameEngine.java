@@ -89,7 +89,7 @@ public class GameEngine implements Runnable {
 
         playerAnimationSystem.update(componentManager);
 
-        animationSystem.update(componentManager);
+        animationSystem.update(componentManager , entityManager);
 
         //explosionCleanupSystem.update(componentManager, entityManager);
 
