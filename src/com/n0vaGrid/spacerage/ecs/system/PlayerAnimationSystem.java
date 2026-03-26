@@ -25,30 +25,17 @@ public class PlayerAnimationSystem {
 
             if(input.left){
 
-                if(ac.current != ac.left){
-                    ac.left.reset();
-                    ac.current = ac.left;
-                }
+                ac.play("left");
 
             }
             else if(input.right){
 
-                if(ac.current != ac.right){
-                    ac.right.reset();
-                    ac.current = ac.right;
-                }
+                ac.play("right");
 
             }
             else{
 
-                if(ac.current == ac.left){
-                    ac.leftReturn.reset();
-                    ac.current = ac.leftReturn;
-                }
-                else if(ac.current == ac.right){
-                    ac.rightReturn.reset();
-                    ac.current = ac.rightReturn;
-                }
+                ac.play("idle");
 
             }
         }

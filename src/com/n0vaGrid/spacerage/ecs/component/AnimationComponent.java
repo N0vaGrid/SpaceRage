@@ -1,27 +1,27 @@
 package com.n0vaGrid.spacerage.ecs.component;
 import com.n0vaGrid.spacerage.engine.Animation;
 
-public class AnimationComponent implements Component {
+import java.util.HashMap;
+import java.util.Map;
 
-    public Animation idle;
-    public Animation left;
-    public Animation right;
+public class AnimationComponent implements Component {
+    public Map<String, Animation> animations = new HashMap<>();
 
     public Animation current;
 
-    public Animation leftReturn;
-    public Animation rightReturn;
-
-    // 多动画（玩家、敌人）
-    public AnimationComponent(Animation idle, Animation left, Animation right){
-        this.idle = idle;
-        this.left = left;
-        this.right = right;
-
-        this.current = idle;
+    public void addAnimation(String name, Animation animation){
+        animations.put(name, animation);
     }
-    // 单动画（爆炸、特效）
-    public AnimationComponent(Animation animation){
-        this.current = animation;
+
+    public void play(String name){
+
+        Animation next = animations.get(name);
+
+        if(next == null) return;
+
+        if(current != next){
+            next.reset();
+            current = next;
+        }
     }
 }

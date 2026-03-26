@@ -7,6 +7,8 @@ import com.n0vaGrid.spacerage.ecs.entity.EntityManager;
 import com.n0vaGrid.spacerage.engine.Animation;
 import com.n0vaGrid.spacerage.util.ResourceManager;
 
+import java.awt.*;
+
 public class CollisionSystem {
 
     public void update(ComponentManager cm, EntityManager em){
@@ -59,8 +61,8 @@ public class CollisionSystem {
 
         cm.addComponent(explosion, new PositionComponent(x, y));
 
-        cm.addComponent(explosion, new AnimationComponent(
-                new Animation(ResourceManager.EXPLOSIONS, 50, false)
-        ));
+        AnimationComponent  ac = new AnimationComponent() ;
+        ac.addAnimation("explosion", new Animation(ResourceManager.EXPLOSIONS, 100, false));
+        cm.addComponent(explosion, ac);
     }
 }

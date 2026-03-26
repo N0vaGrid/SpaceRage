@@ -63,12 +63,23 @@ public class EntityFactory {
         };
         Animation rightReturn = new Animation(rightReturnFrames,120,false);
 
-        AnimationComponent anim =
-                new AnimationComponent(idle, left, right);
-        anim.leftReturn = leftReturn;
-        anim.rightReturn = rightReturn;
+        AnimationComponent ac = new AnimationComponent();
 
-        cm.addComponent(player, anim);
+        ac.addAnimation("idle",
+                new Animation(new Image[]{ResourceManager.PLAYER_IDLE},120,true)
+        );
+
+        ac.addAnimation("left",
+                new Animation(ResourceManager.PLAYER_LEFT,120,false)
+        );
+
+        ac.addAnimation("right",
+                new Animation(ResourceManager.PLAYER_RIGHT,120,false)
+        );
+
+        ac.play("idle");
+
+        cm.addComponent(player, ac);
 
 
         // 碰撞器
