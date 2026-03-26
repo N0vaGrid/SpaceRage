@@ -24,8 +24,8 @@ public class RenderSystem {
         //绘制星星
         for(int i = 0; i < 120; i++){
 
-            int x = random.nextInt(800);
-            int y = random.nextInt(600);
+            int x = random.nextInt(Config.WIDTH);
+            int y = random.nextInt(Config.HEIGHT);
 
             int layer = random.nextInt(3);
 
@@ -83,7 +83,27 @@ public class RenderSystem {
                 s.x = random.nextInt(Config.WIDTH);
             }
 
+            //闪烁
+            s.twinkleTimer++;
+
+            if(s.twinkleTimer > s.twinkleDelay){
+
+                s.twinkleTimer = 0;
+                s.twinkleDelay = 30 + random.nextInt(60);
+
+            }
+
+            //绘制星星
+            if(s.size == 1){
+
+                if(s.twinkleTimer < s.twinkleDelay / 2)
+                    g.fillRect(s.x, s.y, s.size, s.size);
+
+            }else{
+
                 g.fillRect(s.x, s.y, s.size, s.size);
+
+            }
 
         }
 
