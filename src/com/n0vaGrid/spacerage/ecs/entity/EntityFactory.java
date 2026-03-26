@@ -49,10 +49,28 @@ public class EntityFactory {
                 false
         );
 
+        //回正动画
+        Image[] leftReturnFrames = new Image[]{
+                ResourceManager.PLAYER_LEFT[1],
+                ResourceManager.PLAYER_LEFT[0],
+                ResourceManager.PLAYER_IDLE
+        };
+        Animation leftReturn = new Animation(leftReturnFrames,120,false);
+        Image[] rightReturnFrames = new Image[]{
+                ResourceManager.PLAYER_RIGHT[1],
+                ResourceManager.PLAYER_RIGHT[0],
+                ResourceManager.PLAYER_IDLE
+        };
+        Animation rightReturn = new Animation(rightReturnFrames,120,false);
+
         AnimationComponent anim =
                 new AnimationComponent(idle, left, right);
+        anim.leftReturn = leftReturn;
+        anim.rightReturn = rightReturn;
 
         cm.addComponent(player, anim);
+
+
         // 碰撞器
         cm.addComponent(player, new ColliderComponent(64, 64));
         cm.addComponent(player, new PlayerComponent());

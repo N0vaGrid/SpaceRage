@@ -24,13 +24,32 @@ public class PlayerAnimationSystem {
             if(ac == null) continue;
 
             if(input.left){
-                ac.current = ac.left;
+
+                if(ac.current != ac.left){
+                    ac.left.reset();
+                    ac.current = ac.left;
+                }
+
             }
             else if(input.right){
-                ac.current = ac.right;
+
+                if(ac.current != ac.right){
+                    ac.right.reset();
+                    ac.current = ac.right;
+                }
+
             }
             else{
-                ac.current = ac.idle;
+
+                if(ac.current == ac.left){
+                    ac.leftReturn.reset();
+                    ac.current = ac.leftReturn;
+                }
+                else if(ac.current == ac.right){
+                    ac.rightReturn.reset();
+                    ac.current = ac.rightReturn;
+                }
+
             }
         }
     }

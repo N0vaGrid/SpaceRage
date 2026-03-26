@@ -9,6 +9,9 @@ public class AnimationComponent implements Component {
 
     public Animation current;
 
+    public Animation leftReturn;
+    public Animation rightReturn;
+
     // 多动画（玩家、敌人）
     public AnimationComponent(Animation idle, Animation left, Animation right){
         this.idle = idle;
